@@ -1,0 +1,143 @@
+# -----------------------------------------------------------------------------
+# Sistemas concurrentes y Distribuidos.
+# Práctica 3. Implementación de algoritmos distribuidos con MPI
+#
+# Alumno: Raúl Rodríguez Pérez
+# Curso: 21/22
+# Clase: 2ºC
+# -----------------------------------------------------------------------------
+
+- Cambios realizados:
+
+	+ Hemos de añadir nuevas variables constantes:
+	np (n productores), nc(n consumidores), etiq_producir y etiq_consumir (para distinguir entrada y salida de mensajes) y k (nos servirá para producir ciertos valores por cada productor).
+
+	+ En producir hemos de modificar el contador para que se sitúe según el productor que lo llama.
+
+	+ El proceso buffer determinará la etiqueta aceptable a recibir según la ocupación del buffer, y posteriormente con un switch sobre esta, enviaremos o recibiremos lo correspondiente de productores o consumidores.
+
+	+ Por último debemos determinar el número de orden de productores y consumidores en el main:
+		El de los productores (al ir de 0 a np-1) coincide con su número de orden.
+
+- Un ejemplo de salida del programa es el siguiente:
+Productor 1 ha producido valor 6
+Productor va a enviar valor 6
+   Buffer ha recibido valor 6 del productor 1
+   Buffer va a enviar valor 6 al consumidor 5
+             Consumidor 5 ha recibido valor 6
+             Consumidor 6 ha recibido valor 7
+             Consumidor 7 ha recibido valor 1
+Productor 0 ha producido valor 1
+Productor va a enviar valor 1
+Productor 1 ha producido valor 7
+Productor va a enviar valor 7
+   Buffer ha recibido valor 7 del productor 1
+   Buffer va a enviar valor 7 al consumidor 6
+   Buffer ha recibido valor 1 del productor 0
+   Buffer va a enviar valor 1 al consumidor 7
+Productor 3 ha producido valor 16
+Productor va a enviar valor 16
+Productor 2 ha producido valor 11
+Productor va a enviar valor 11
+Productor 1 ha producido valor 8
+Productor va a enviar valor 8
+   Buffer ha recibido valor 16 del productor 3
+   Buffer va a enviar valor 16 al consumidor 8
+             Consumidor 8 ha recibido valor 16
+             Consumidor 9 ha recibido valor 8
+   Buffer ha recibido valor 8 del productor 1
+   Buffer ha recibido valor 11 del productor 2
+   Buffer va a enviar valor 8 al consumidor 9
+   Buffer ha recibido valor 12 del productor 2
+Productor 2 ha producido valor 12
+Productor va a enviar valor 12
+   Buffer ha recibido valor 17 del productor 3
+Productor 3 ha producido valor 17
+Productor va a enviar valor 17
+Productor 2 ha producido valor 13
+Productor va a enviar valor 13
+   Buffer ha recibido valor 13 del productor 2
+   Buffer ha recibido valor 2 del productor 0
+Productor 0 ha producido valor 2
+Productor va a enviar valor 2
+Productor 1 ha producido valor 9
+Productor va a enviar valor 9
+   Buffer ha recibido valor 9 del productor 1
+Productor 3 ha producido valor 18
+Productor va a enviar valor 18
+   Buffer ha recibido valor 18 del productor 3
+   Buffer ha recibido valor 3 del productor 0
+Productor 0 ha producido valor 3
+Productor va a enviar valor 3
+          ----Consumidor 5 ha consumido valor 6
+             Consumidor 5 ha recibido valor 11
+   Buffer va a enviar valor 11 al consumidor 5
+   Buffer va a enviar valor 12 al consumidor 6
+          ----Consumidor 6 ha consumido valor 7
+             Consumidor 6 ha recibido valor 12
+Productor 1 ha producido valor 10
+Productor va a enviar valor 10
+   Buffer ha recibido valor 10 del productor 1
+          ----Consumidor 7 ha consumido valor 1
+             Consumidor 7 ha recibido valor 17
+   Buffer va a enviar valor 17 al consumidor 7
+          ----Consumidor 9 ha consumido valor 8
+   Buffer va a enviar valor 13 al consumidor 9
+             Consumidor 9 ha recibido valor 13
+Productor 3 ha producido valor 19
+Productor va a enviar valor 19
+   Buffer ha recibido valor 19 del productor 3
+Productor 0 ha producido valor 4
+Productor va a enviar valor 4
+   Buffer ha recibido valor 4 del productor 0
+          ----Consumidor 8 ha consumido valor 16
+             Consumidor 8 ha recibido valor 2
+   Buffer va a enviar valor 2 al consumidor 8
+Productor 2 ha producido valor 14
+Productor va a enviar valor 14
+   Buffer ha recibido valor 14 del productor 2
+Productor 3 ha producido valor 20
+Productor va a enviar valor 20
+   Buffer ha recibido valor 20 del productor 3
+Productor 2 ha producido valor 15
+Productor va a enviar valor 15
+   Buffer ha recibido valor 15 del productor 2
+Productor 0 ha producido valor 5
+Productor va a enviar valor 5
+   Buffer ha recibido valor 5 del productor 0
+          ----Consumidor 9 ha consumido valor 13
+   Buffer va a enviar valor 9 al consumidor 9
+             Consumidor 9 ha recibido valor 9
+          ----Consumidor 5 ha consumido valor 11
+             Consumidor 5 ha recibido valor 18
+   Buffer va a enviar valor 18 al consumidor 5
+   Buffer va a enviar valor 3 al consumidor 6
+          ----Consumidor 6 ha consumido valor 12
+             Consumidor 6 ha recibido valor 3
+          ----Consumidor 7 ha consumido valor 17
+             Consumidor 7 ha recibido valor 10
+   Buffer va a enviar valor 10 al consumidor 7
+          ----Consumidor 8 ha consumido valor 2
+             Consumidor 8 ha recibido valor 19
+   Buffer va a enviar valor 19 al consumidor 8
+   Buffer va a enviar valor 4 al consumidor 9
+          ----Consumidor 9 ha consumido valor 9
+             Consumidor 9 ha recibido valor 4
+          ----Consumidor 5 ha consumido valor 18
+             Consumidor 5 ha recibido valor 14
+   Buffer va a enviar valor 14 al consumidor 5
+          ----Consumidor 6 ha consumido valor 3
+   Buffer va a enviar valor 20 al consumidor 6
+             Consumidor 6 ha recibido valor 20
+          ----Consumidor 7 ha consumido valor 10
+             Consumidor 7 ha recibido valor 15
+   Buffer va a enviar valor 15 al consumidor 7
+          ----Consumidor 8 ha consumido valor 19
+   Buffer va a enviar valor 5 al consumidor 8
+             Consumidor 8 ha recibido valor 5
+          ----Consumidor 6 ha consumido valor 20
+          ----Consumidor 9 ha consumido valor 4
+          ----Consumidor 7 ha consumido valor 15
+          ----Consumidor 5 ha consumido valor 14
+          ----Consumidor 8 ha consumido valor 5
+

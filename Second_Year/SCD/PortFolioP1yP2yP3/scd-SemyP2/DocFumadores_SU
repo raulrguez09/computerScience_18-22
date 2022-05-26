@@ -1,0 +1,49 @@
+# -----------------------------------------------------------------------------
+# Sistemas concurrentes y Distribuidos.
+# Practica 2: Problema de los fumadores (SU)
+#
+# Alumno: Raúl Rodríguez Pérez
+# Curso: 21/22
+# Clase: 2ºC
+# -----------------------------------------------------------------------------
+
+ - Variables permanentes:
+
+	int ingr_actual: representa el ingrediente que se encuentra disponible actualmente en el mostrador, los valores posibles son por lo 	
+			 tanto 0, 1 y 2 (tres tipos de ingredientes para fumar).
+
+ - Colas condición:
+
+	ingr_disp[3]: su espera asociada es ingr_actual !=i, cuando el número de ingrediente pasado no es el que se encuentra en el mostrador, 
+	  	      se ha de esperar a que se coloque.
+
+	mostr_vacio: su espera asociada es ingr_actual != -1, cuando ingr_actual (ingrediente en el mostrador) es válido (valores 0, 1, 2), 
+	             espera hasta que sea retirado (ingr_actual==-1).
+
+ - Pseudo-código:
+
+procedure obtenerIngrediente[ i : 0..2 ] 
+begin
+	if ingr_actual != i then
+		ingr_disp[i].wait();
+	end
+	
+	ingr_actual := -1;
+	mostr_vacio.signal();
+end
+
+procedure ponerIngrediente[ i : 0..2 ] 
+begin
+	ingr_actual := i;
+	ingr_disp[i].signal();
+end
+
+procedure esperarRecogidaIngrediente ( )
+begin
+	if ingr_actual != -1 then
+		mostr_vacio.wait();
+	end
+end
+
+	
+

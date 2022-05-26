@@ -1,0 +1,37 @@
+# -----------------------------------------------------------------------------
+# Sistemas concurrentes y Distribuidos.
+# Práctica 1: Problema productor-consumidor (sol con FIFO)
+#
+# Alumno: Raúl Rodríguez Pérez
+# Curso: 21/22
+# Clase: 2ºC
+# -----------------------------------------------------------------------------
+
+ 1. VARIABLES NECESARIAS Y CÓMO DETERMINA DÓNDE LEER Y ESCRIBIR
+
+	Gracias a primera_libre sabemos el índice del vector a partir del cual es posible escribir y gracias a primera_ocupada sabremos qué se 	
+	puede leer. El programa siempre escribirá en la posición primera_libre y leerá, si es posible según los semáforos, primera_ocupada (pues 
+	será la primera que se ha escrito antes de la lectura anterior)
+
+ 2. SEMÁFOROS NECESARIOR, UTILIDAD, VALORES INICIALES Y DÓNDE USAR sem_wait y sem_signal
+
+	Necesitaremos dos semáforos que nos proporcionarán el número de elementos libres y ocupados del vector:
+	Semaphore 	libres,
+			ocupadas;
+
+	Nos serán útiles para saber cuándo se puede escribir y cuándo se puede leer, y así intercalar los procesos.
+
+	Como valores iniciales, el semáforo de libres estará incializado al tamaño del vector y el de ocupadas 0.
+
+ libres:
+
+	sem_wait-> se usará justo antes de escribir sobre el vector, pues debemos comprobar que hay posiciones vacías donde hacerlo
+
+	sem_signal-> se usará después de decrementar primera_libre, eliminar un elemento del vector y consumir el dato
+
+ ocupadas:
+
+	sem_wait-> se usará justo antes de leer el dato de la última posición ocupada del vector (y consumirlo)
+
+	sem_signal-> se usaŕa después de incrementar primera_libre, es decir, después de producir un dato y ocupar otra posición
+

@@ -1,0 +1,30 @@
+# -----------------------------------------------------------------------------
+# Sistemas concurrentes y Distribuidos.
+# Práctica 1: Problema de los fumadores
+#
+# Alumno: Raúl Rodríguez Pérez
+# Curso: 21/22
+# Clase: 2ºC
+# -----------------------------------------------------------------------------
+
+ 1. VARIABLES NECESARIAS 	
+ 
+ 	Solo necesitamos el número de fumadores, que en ese caso es "int num_fumadores = 3".
+ 
+ 2. SEMÁFOROS NECESARIOS, UTILIDAD, VALORES INICIALES Y HEBRAS QUE HACEN WAIT Y SIGNAL SOBRE DICHO SEM
+
+	Necesitamos dos semáforos, mostr_vacio(mostrador vacío) y un vector de 3 semáforos de ingr_disp(ingredientes disponibles).
+	El semáforo de mostr_vacio comienza a 1 y el vector de semáforos ingredientes a {0,0,0}
+
+	Estos semáforos nos servirán para saber cúando no se puede leer(mostr_vacio==1) y cuando sí y qué fumador debe hacerlo {1,0,0}, {0,1,0} ó 
+	{0,0,1}.
+
+	Lanzaremos entonces cuatro hebras, tres fumadores y un estanquero. Cada fumador necesita un ingrediente, por lo que el fumador i debe 
+	esperar el ingrediente en la posición i del vector de semáforos.
+
+	Es así como los fumadores harán el wait de ingr_disp[num_fumador], una vez conseguido este, mandarán un signal a mostr_vacio y ahora podrán 
+	fumar.
+
+	Por otra parte, el estanquero, produce un ingrediente aleatoriamente, espera a mostr_vacio(sem_wait(mostr_vacio)), y una vez en el que el 
+	mostrador está libre, se colocará el ingrediente y se mandará un signal a ingr_disp[i], donde i es el dato producido entre 0 y 2 (3 	
+	ingredientes).

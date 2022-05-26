@@ -1,0 +1,129 @@
+# -----------------------------------------------------------------------------
+# Sistemas concurrentes y Distribuidos.
+# Práctica 3. Implementación de algoritmos distribuidos con MPI
+#
+# Alumno: Raúl Rodríguez Pérez
+# Curso: 21/22
+# Clase: 2ºC
+# -----------------------------------------------------------------------------
+
+- Cambios realizados:
+
+	Para la resolución de filósofos con camarero necesitamos de un nuevo proceso y una nueva función asociada.
+
+	Esta función recibirá mensajes con etiqueta sentarse y levantarse, de distintos filósofos.
+	Los filósofos, por lo tanto, enviarán estos mensajes para solicitar sentarse y, tras comer, para solicitar levantarse.
+
+	Para que el camarero permita sentarse, debemos comprobar antes si en la mesa hay menos de 4 filósofos.
+
+	Para que la recepción del mensaje de levantarse no sea bloqueante, debemos comprobar antes con Iprobe si hay mensajes con etiqueta 		levantarse, solo si es así aceptaremos la solicitud.
+
+- Un ejemplo de salida del programa es el siguiente:
+
+Filósofo 4 solicita sentarse en la mesa 
+Filósofo 0 solicita sentarse en la mesa 
+Filósofo 0 solicita ten. izq.1
+Filósofo 4 solicita ten. izq.5
+Filósofo 4 solicita ten. der.3
+Filósofo 4 comienza a comer
+Filósofo 2 solicita sentarse en la mesa 
+Filósofo 2 solicita ten. izq.3
+     Ten. 3 ha sido cogido por filo. 4
+     Ten. 5 ha sido cogido por filo. 4
+Filósofo 6 solicita sentarse en la mesa 
+Filósofo 6 solicita ten. izq.7
+Filósofo 6 solicita ten. der.5
+     Ten. 7 ha sido cogido por filo. 6
+           Camarero sienta en la mesa a filósofo 0 (1 en mesa)
+           Camarero sienta en la mesa a filósofo 4 (2 en mesa)
+           Camarero sienta en la mesa a filósofo 6 (3 en mesa)
+           Camarero sienta en la mesa a filósofo 2 (4 en mesa)
+Filósofo 8 solicita sentarse en la mesa 
+Filósofo 0 solicita ten. der.9
+Filósofo 0 comienza a comer
+     Ten. 9 ha sido cogido por filo. 0
+     Ten. 1 ha sido cogido por filo. 0
+     Ten. 5 ha sido liberado por filo. 4
+     Ten. 5 ha sido cogido por filo. 6
+Filósofo 4 suelta ten. izq. 5
+Filósofo 4 suelta ten. der. 3
+Filósofo 6 comienza a comer
+     Ten. 3 ha sido liberado por filo. 4
+Filósofo 4 solicita levantarse 
+     Ten. 3 ha sido cogido por filo. 2
+           Camarero levanta de la mesa a filósofo 4 (3 en mesa)
+           Camarero sienta en la mesa a filósofo 8 (4 en mesa)
+Filosofo 4 comienza a pensar
+Filósofo 2 solicita ten. der.1
+Filósofo 8 solicita ten. izq.9
+Filósofo 0 suelta ten. izq. 1
+Filósofo 0 suelta ten. der. 9
+     Ten. 1 ha sido liberado por filo. 0
+     Ten. 1 ha sido cogido por filo. 2
+Filósofo 2 comienza a comer
+Filósofo 8 solicita ten. der.7
+     Ten. 9 ha sido liberado por filo. 0
+     Ten. 9 ha sido cogido por filo. 8
+Filósofo 0 solicita levantarse 
+           Camarero levanta de la mesa a filósofo 0 (3 en mesa)
+Filosofo 0 comienza a pensar
+Filósofo 6 suelta ten. izq. 7
+Filósofo 0 solicita sentarse en la mesa 
+     Ten. 3 ha sido liberado por filo. 2
+Filósofo 2 suelta ten. izq. 3
+Filósofo 2 suelta ten. der. 1
+Filósofo 2 solicita levantarse 
+     Ten. 1 ha sido liberado por filo. 2
+           Camarero sienta en la mesa a filósofo 0 (4 en mesa)
+Filósofo 0 solicita ten. izq.1
+     Ten. 1 ha sido cogido por filo. 0
+Filósofo 0 solicita ten. der.9
+           Camarero levanta de la mesa a filósofo 2 (3 en mesa)
+Filosofo 2 comienza a pensar
+     Ten. 7 ha sido liberado por filo. 6
+Filósofo 6 suelta ten. der. 5
+     Ten. 5 ha sido liberado por filo. 6
+Filósofo 8 comienza a comer
+     Ten. 7 ha sido cogido por filo. 8
+Filósofo 6 solicita levantarse 
+Filósofo 4 solicita sentarse en la mesa 
+Filósofo 4 solicita ten. izq.5
+           Camarero sienta en la mesa a filósofo 4 (4 en mesa)
+           Camarero levanta de la mesa a filósofo 6 (3 en mesa)
+Filosofo 6 comienza a pensar
+Filósofo 4 solicita ten. der.3
+     Ten. 5 ha sido cogido por filo. 4
+     Ten. 3 ha sido cogido por filo. 4
+Filósofo 4 comienza a comer
+Filósofo 6 solicita sentarse en la mesa 
+Filósofo 6 solicita ten. izq.7
+           Camarero sienta en la mesa a filósofo 6 (4 en mesa)
+Filósofo 4 suelta ten. izq. 5
+     Ten. 5 ha sido liberado por filo. 4
+Filósofo 4 suelta ten. der. 3
+Filósofo 8 suelta ten. izq. 9
+Filósofo 2 solicita sentarse en la mesa 
+     Ten. 9 ha sido liberado por filo. 8
+     Ten. 9 ha sido cogido por filo. 0
+Filósofo 8 suelta ten. der. 7
+Filósofo 0 comienza a comer
+           Camarero levanta de la mesa a filósofo 8 (3 en mesa)
+           Camarero sienta en la mesa a filósofo 2 (4 en mesa)
+     Ten. 7 ha sido liberado por filo. 8
+     Ten. 7 ha sido cogido por filo. 6
+Filósofo 6 solicita ten. der.5
+Filósofo 6 comienza a comer
+Filósofo 8 solicita levantarse 
+Filosofo 8 comienza a pensar
+     Ten. 5 ha sido cogido por filo. 6
+     Ten. 3 ha sido liberado por filo. 4
+           Camarero levanta de la mesa a filósofo 4 (3 en mesa)
+Filósofo 4 solicita levantarse 
+Filosofo 4 comienza a pensar
+Filósofo 2 solicita ten. izq.3
+     Ten. 3 ha sido cogido por filo. 2
+Filósofo 0 suelta ten. izq. 1
+Filósofo 0 suelta ten. der. 9
+     Ten. 1 ha sido liberado por filo. 0
+     Ten. 9 ha sido liberado por filo. 0
+

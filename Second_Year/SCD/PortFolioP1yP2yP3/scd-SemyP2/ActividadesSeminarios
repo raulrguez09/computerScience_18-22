@@ -1,0 +1,51 @@
+ ACTIVIDAD 1
+
+	Si elminamos el unlock, no se liberará el cerrojo, dejando al monitor en estado incorrecto (interbloqueo)
+
+******************************************************************************************************************************************
+
+ ACTIVIDAD BARRERA1 (SC)
+
+	1 - La hebra que entra la última a cita es siempre la primera en salir de este porque estamos ante una semántica de Señalar y Continuar, 
+	por lo que produce la señal, las que están en cola esperan, y esta se ejecuta hasta terminar.
+
+	2 - El orden varía porque notify_one activa una hebra en cola aleatoria,  no sabemos el criterio que sigue, por lo que el orden cambia
+
+	3 - No necesita exclusión mutua pues afecta a variables distintas, que no comparten procesos.
+
+	notify_one -> notify_all: No se observa ningún cambio apreciable, simplemente, todas se ponen en cola al mismo tiempo. 
+
+******************************************************************************************************************************************
+
+ ACTIVIDAD IMPLEMENTACIÓN "prodcons1_sc_FIFO.cpp"
+
+	Querer traducir de LIFO a FIFO supone añadir una variable adicional, "n",  que recoja el número de celdas ocupadas y sustituir en las 
+	condiciones asociadas a las colas "primera_libre" por esta. Añadimos además "primera_ocupada", que señalará la posición que se puede leer.
+
+	El programa entonces escribirá siempre en "primera_libre" y leerá en "primera_ocupada", produciendo una consumisión FIFO.
+
+******************************************************************************************************************************************
+
+ ACTIVIDAD MÚLTIPLES PRODSCONS -> prodcons2_sc.cpp
+
+	Hemos de sustituir if por while en extraer e insertar porque, con semántica SC, tanto el señalador como otros procesos pueden hacer falsa 
+	la condición después de que el señalado abandone la cola condición, por tanto, no se puede garantizar que el proceso señalado cumple la 	condición al terminar el wait, siendo necesario comprobarla de nuevo.
+
+******************************************************************************************************************************************
+
+ PROPIEDADES DE LA BARRERA PARCIAL CON SU
+
+	El orden de salida de la cita coincide siempre con el orden de entrada debido a que, llegan todas las hebras y, gracias a la semántica SU, 
+	cuando hace el signal continúa la hebra que primero llegó, y así sucesivamente.
+
+	Esto se consigue gracias al contador de hebras de llegada y al número de hebras por cita, se deja entrar un grupo, y si entran más 
+	señalarán a las del grupo anterior, entrando pues después de la salida de los anteriores.
+
+******************************************************************************************************************************************
+
+ ACTIVIDAD MÚLTIPLES PRODS Y CONST -> prodcons2_su.cpp
+
+	En este caso no es necesario cambiar los if por while, debido a que en el momento que se señala, se activa el proceso que espera en la 
+	cola. Por lo que no es necesario realizar varias comprobaciones.
+
+
