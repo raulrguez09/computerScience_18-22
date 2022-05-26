@@ -1,0 +1,22 @@
+Id. usuario del trabajo: 
+Id.  del trabajo: 
+Nombre  del trabajo especificado por usuario: 
+Directorio en el que se ha ejecutado qsub: 
+Directorio de trabajo: 
+Cola: 
+Nodo que ejecuta qsub: 
+Nodos asignados al trabajo:
+Nº de threads inicial: 12
+Directorio de trabajo: 
+
+1.Para 12 threads:
+/var/spool/slurmd/job08049/slurm_script: línea 29: /HelloOMP: No existe el fichero o el directorio
+
+1.Para 6 threads:
+/var/spool/slurmd/job08049/slurm_script: línea 29: /HelloOMP: No existe el fichero o el directorio
+
+1.Para 3 threads:
+/var/spool/slurmd/job08049/slurm_script: línea 29: /HelloOMP: No existe el fichero o el directorio
+
+1.Para 1 threads:
+/var/spool/slurmd/job08049/slurm_script: línea 29: /HelloOMP: No existe el fichero o el directorio

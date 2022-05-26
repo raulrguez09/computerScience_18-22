@@ -1,0 +1,22 @@
+#########################################################################
+Id. usuario del trabajo: c1estudiante27
+Id. del trabajo: 8429
+Nombre del trabajo especificado por usuario: helloomp
+Directorio de trabajo (en el que se ejecuta el script): /home/c1estudiante27/prac0/ejer4
+Cola: ac
+Host de envío del trabajo: atcgrid
+Nº de nodos asignados al trabajo: 1
+Nodos asignados al trabajo: atcgrid2
+CPUs por nodo: 24
+#########################################################################
+Nº de threads inicial: 12
+Directorio de trabajo: /home/c1estudiante27/prac0/ejer4
+
+1.Para 12 threads:
+(3:!!!Hello)(0:!!!Hello)(5:!!!Hello)(9:!!!Hello)(7:!!!Hello)(4:!!!Hello)(11:!!!Hello)(1:!!!Hello)(2:!!!Hello)(6:!!!Hello)(10:!!!Hello)(8:!!!Hello)(0: world!!!)
+1.Para 6 threads:
+(1:!!!Hello)(5:!!!Hello)(3:!!!Hello)(0:!!!Hello)(2:!!!Hello)(4:!!!Hello)(0: world!!!)
+1.Para 3 threads:
+(1:!!!Hello)(0:!!!Hello)(2:!!!Hello)(0: world!!!)
+1.Para 1 threads:
+(0:!!!Hello)(0: world!!!)

@@ -1,0 +1,9 @@
+Práctica 2, Gurpo A2
+
+Integrantes: Raúl Rodríguez Pérez y Pedro Iniesta López
+
+Para compilar, hacemos make.
+Para ejecutar el servidor, hacemos make ejecutarServidor
+Para ejecutar el Cliente, hacemos make ejecutarCliente
+
+El juego está pensado para 4 jugadores, por tanto, deberá haber 1 servidor y 4 clientes.
