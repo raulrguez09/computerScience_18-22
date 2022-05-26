@@ -1,0 +1,137 @@
+#Iniciamos sesión
+	mysql -h 127.0.0.1 -P 3306 -u raulrguez -p
+	raulrguez covid19
+
+# Creamos una tabla para los eventos
+
+CREATE TABLE eventos(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  lugar VARCHAR(100) NOT NULL,
+  fecha VARCHAR(30) NOT NULL,
+  portada VARCHAR(50) NOT NULL,
+  info VARCHAR(4000) NOT NULL,
+  publicado INT DEFAULT 1
+);
+
+CREATE TABLE imagenes(
+	idEv INT NOT NULL,
+	rutaImg VARCHAR(50) PRIMARY KEY
+);
+
+CREATE TABLE comentarios(
+	idCom INT AUTO_INCREMENT PRIMARY KEY,
+	idEv INT NOT NULL,
+	usuario VARCHAR(50),
+	fecha VARCHAR(40),
+	comentario VARCHAR(280),
+	editado INT DEFAULT 0
+);
+
+#Y una tabla para las malas palabras
+
+CREATE TABLE malasPalabras(
+	mala VARCHAR(20)
+);
+
+CREATE TABLE usuarios(
+	nick VARCHAR(20) PRIMARY KEY,
+	nombre VARCHAR(30),
+	pasw VARCHAR(100),
+	email VARCHAR(25),
+	tipo INT NOT NULL
+);
+
+CREATE TABLE etiquetas(
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	idEv INT NOT NULL,
+	etiqueta VARCHAR(30)
+);
+
+#Insertamos en la tabla eventos
+
+INSERT INTO eventos (id, nombre, lugar, fecha, portada, info) VALUES ('1','Torneo de fifa 21', 'Organizacion por parte de la ugr','22 de junio de 2021','img/portadas/fifa_21.jpg','FIFA es una saga de videojuegos de fútbol publicados anualmente por Electronic Arts bajo el sello de EA Sports creado en Japón. Cuando la saga comenzó a finales de 1993 se destacó por ser el primero en tener una licencia oficial de la FIFA. Las últimas ediciones de la saga contienen muchas licencias exclusivas y los equipos de ligas de todo el mundo, como la Premier League y la Football League inglesa, Serie A italiana, Bundesliga alemana, La Liga Primera División de España, Selecciones Nacionales, entre otras ligas más que han ido agregando a lo largo de estos últimos años, lo que permite el uso real de los estadios, cánticos del público, nombres reales de los jugadores y sus semejanzas en cómo juegan dentro del campo, etc. El primer juego de la saga se caracterizaba por su perspectiva isométrica o de tres cuartos, que se diferenciaba de los otros títulos que ofrecían una vista desde arriba o vista de pájaro.');
+
+INSERT INTO eventos (id, nombre, lugar, fecha, portada, info) VALUES ('2','Torneo de League of Legends', 'Organizacion por parte de la ugr','23 de junio de 2021','img/portadas/League-of-Legends.jpg','League of Legends (también conocido por sus siglas LoL) es un videojuego del género multijugador de arena de batalla en línea (MOBA) y deporte electrónico el cual fue desarrollado por Riot Games para Microsoft Windows y OS X y para consolas digitales. En un principio los servidores estaban alojados en la empresa GOA y fue vendida a la empresa china Tencent Holdings Limited. El juego fue diseñado para el sistema operativo Microsoft Windows y lanzaron una beta para OS X, dejando al poco tiempo el proyecto de lado. Esta beta ha sido mejorada por parte de usuarios del juego, haciendo posible jugar a una versión actualizada de League of Legends. En octubre de 2012, contaba con 70 millones de jugadores registrados. Para marzo de 2013 se registró 5 millones de jugadores conectados al mismo tiempo en todo el mundo. Es un juego de alta competitividad siendo uno de los juegos más populares de los deportes electrónicos (e-sports).League of Legends fue bien recibido en su lanzamiento, ganando elogios por sus diversos departamentos artísticos y musicales, particularmente por su diseño de personajes(154 campeones) y valor de producción.');
+
+INSERT INTO eventos (id, nombre, lugar, fecha, portada, info) VALUES ('3','Torneo de Clash Royale', 'Organizacion por parte de la ugr','24 de junio de 2021','img/portadas/clash.jpg', 'Clash Royale, también conocido por su abreviatura CR, es un videojuego de estrategia en línea para dispositivos móviles, creado por la compañía finlandesa Supercell.1​ Fue lanzado oficialmente el 2 de marzo del 2016.2​ Es un videojuego freemium de estrategia en tiempo real basado en los personajes de Clash of Clans.3​ Combina elementos de los juegos de cartas coleccionables y defensa de torres.El videojuego fue lanzado en fase beta el 4 de enero de 2016 en Canadá, Hong Kong, Australia, Suecia, Noruega, Dinamarca, Islandia, Finlandia y Nueva Zelanda y para plataformas iOS. En febrero de 2016 fue lanzado para Android en algunos países y siendo lanzado finalmente el 3 de marzo de 2016 para todo el mundoClash Royale recibió principalmente críticas positivas. Eli Hodapp, de TouchArcade, lo calificó como «absolutamente fenomenal» y lo puntuó con cinco estrellas sobre cinco.6​ Harry Slater, revisor de Pocket Gamer, le dio al juego un nueve sobre diez, resumiendo que es «es una cantidad increíble de diversión gratificante, a veces es mordaz, y hay contenido aquí que te mantendrá ocupado durante semanas, si no meses».');
+
+INSERT INTO eventos (id, nombre, lugar, fecha, portada, info) VALUES ('4','Torneo de Csgo', 'Organizacion por parte de la ugr','25 de junio de 2021','img/portadas/csgo.png', 'Counter-Strike: Global Offensive (CS:GO) es un videojuego de disparos en primera persona desarrollado por Valve Corporation en cooperación con Hidden Path Entertainment, y es el cuarto juego de la saga Counter-Strike, sin contar Counter-Strike: Online. Fue lanzado como beta al mercado el 21 de agosto de 2012 para las plataformas de Microsoft Windows, Mac OS X y Xbox 360, mientras que sufrió un retraso en PlayStation 3. Posteriormente, la versión para Linux estuvo disponible al público el 22 de septiembre de 2014.
+Global Offensive dispuso de una beta accesible únicamente mediante invitación en Steam, en su momento la revista PC Gamer anunció que el videojuego sería lanzado oficialmente el 21 de agosto de 2012 a un precio de € 10,991​2​, aunque ahora es gratuito.');
+
+INSERT INTO eventos (id, nombre, lugar, fecha, portada, info) VALUES ('5','Torneo de Hearthstone','Organizacion por parte de la ugr','26 de junio de 2021','img/portadas/hearthstone.jpg', 'Hearthstone is a free-to-play online digital collectible card game developed and published by Blizzard Entertainment. Originally subtitled Heroes of Warcraft, Hearthstone builds upon the existing lore of the Warcraft series by using the same elements, characters, and relics. It was first released for Microsoft Windows and macOS in March 2014, with ports for iOS and Android releasing later that year. The game features cross-platform play, allowing players on any supported device to compete with one another, restricted only by geographical region account limits. The game is a turn-based card game between two opponents, using constructed decks of 30 cards along with a selected hero with a unique power. Players use their limited mana crystals to play abilities or summon minions to attack the opponent.');
+
+INSERT INTO eventos (id, nombre, lugar, fecha, portada, info) VALUES ('6','Torneo de Valorant', 'Organizacion por parte de la ugr','27 de junio de 2021','img/portadas/valorant.jpg', 'Valorant es un videojuego de disparos táctico en equipo y en primera persona ambientado en un futuro próximo.1​2​3​4​ Los jugadores asumen el control de agentes, personajes que provienen de una gran cantidad de países y culturas de todo el mundo. En el modo de juego principal, los jugadores se unen al equipo atacante o defensor con cada equipo que tiene cinco jugadores. Los agentes tienen habilidades únicas y usan un sistema económico para comprar sus habilidades y armas. El videojuego tiene una variedad de armas que incluyen pistolas, subfusiles, escopetas, ametralladoras, fusiles de asalto y fusiles de francotirador.5​6​ Cada arma tiene un patrón de retroceso que debe ser controlado por el jugador para poder disparar con precisión. El equipo atacante tiene una bomba, llamada Spike, que necesitan plantar en un sitio. Si el equipo atacante protege con éxito la Spike durante 40 segundos y detona, obtendrán un punto. Si el equipo defensor desactiva con éxito la Spike, o el temporizador de la ronda de 100 segundos expira, el equipo defensor obtiene un punto. Si se eliminan todos los miembros de un equipo, el equipo contrario gana un punto.');
+
+INSERT INTO eventos (id, nombre, lugar, fecha, portada, info) VALUES ('7','Torneo de Fortnite', 'Organizacion por parte de la ugr','28 de junio de 2021','img/portadas/fortnite.jpg', 'Fortnite es un videojuego del año 2017 desarrollado por la empresa Epic Games, lanzado como diferentes paquetes de software que presentan diferentes modos de juego, pero que comparten el mismo motor de juego y mecánicas. Fue anunciado en los Spike Video Game Awards en 2011. Los modos de juego publicados incluyen Fortnite Battle Royale, un juego gratuito donde hasta cien jugadores luchan en una isla, en espacios cada vez más pequeños debido a la tormenta, para ser la última persona en pie, y Fortnite: Salvar el mundo, un juego cooperativo de hasta cuatro jugadores que consiste en luchar contra carcasas, criaturas parecidas a zombis, utilizando objetos y fortificaciones. Ambos modos de juego se lanzaron en 2017 como títulos de acceso anticipado. Salvar el Mundo está disponible solo para Windows, macOS, PlayStation 4 y Xbox One, mientras que Battle Royale ha sido publicado también para Nintendo Switch, dispositivos iOS y para Android. Asimismo, se planea su lanzamiento en las consolas PlayStation 5 y Xbox Series X|S. En agosto de 2020, el juego fue retirado de la tiendas App Store y Play Store por infringir sus normas, aunque sigue disponible en la tienda oficial de Epic así como en la Galaxy Store.1');
+
+INSERT INTO eventos (id, nombre, lugar, fecha, portada, info) VALUES ('8','Torneo de Rocket League', 'Organizacion por parte de la ugr','29 de junio de 2021','img/portadas/RocketLeague.jpg', 'Rocket League es un videojuego que combina el fútbol con los vehículos. Fue desarrollado por Psyonix y lanzado el 7 de julio del 2015. Se encuentra disponible en español, tiene modos de juego cooperativo, de un jugador y en línea. Es la secuela de Supersonic Acrobatic Rocket-Powered Battle-Cars, juego lanzado para PlayStation 3 en 2008. Durante la fase de desarrollo, Rocket League llevaba como nombre tentativo Battle Cars 2.El juego se asemeja al fútbol, pero utilizando vehículos en lugar de jugadores y una pelota de gran tamaño. En los partidos pueden participar desde 1 vs 1 hasta 3 vs 3 en modo competitivo, en modo informal se puede hasta 4 vs 4 jugadores distribuidos en dos equipos, naranja y azul o rojo y gris cuando es 2 vs 2 equipo contra equipo. Cada vehículo puede utilizar propulsión extra, tanto para acelerar como para desplazarse por el aire, siendo esta una característica fundamental del juego. Dicha propulsión puede recargarse mediante dots distribuidos en el campo de juego y que reaparecen continuamente. Los partidos duran 5 minutos, disputándose un tiempo extra indefinido en caso de empate.');
+
+INSERT INTO eventos (id, nombre, lugar, fecha, portada, info) VALUES ('9','Torneo de Warzone', 'Organizacion por parte de la ugr','30 de junio de 2021','img/portadas/warzone.jpg', 'Call of Duty: Warzone es un videojuego de Battle Royale gratuito lanzado el 10 de marzo de 2020 para PlayStation 4, Xbox One y Microsoft Windows. El juego está disponible en esas plataformas más PlayStation 5 y Xbox series X/S, El juego es parte del título de 2019 Call of Duty: Modern Warfare, pero no requiere su compra y se presentó durante la temporada 2 del contenido de Modern Warfare. Warzone fue desarrollado por Infinity Ward y Raven Software y publicado por Activision. Warzone permite el combate multijugador en línea entre 150 jugadores, aunque algunos modos de juego por tiempo limitado admiten 200 jugadores. El juego presenta tanto un juego multiplataforma como una progresión multiplataforma entre tres juegos. El juego presenta dos modos principales: Saqueo (o botín) y Battle Royale. Warzone introduce un nuevo sistema de moneda en el juego que se puede utilizar en "Estaciones de compra" en Verdansk y sus alrededores. Las entregas de "armamento" son un ejemplo de dónde se puede intercambiar efectivo por acceso limitado a las clases de armas personalizadas de los jugadores (antes las clases se compartían con las del modo multijugador de Modern Warfare.');
+
+
+#Insertamos en la tabla de imagenes
+
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('1','img/fifa/fifa_21.jpg');
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('1','img/fifa/torneo.png');
+
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('2','img/lol/League-of-Legends.jpg');
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('2','img/lol/torneo.jpg');
+
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('3','img/clash/clash.jpg');
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('3','img/clash/torneo.jpg');
+
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('4','img/csgo/csgo.png');
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('4','img/csgo/torneo.jpg');
+
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('5','img/hearthstone/hearthstone.jpg');
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('5','img/hearthstone/torneo.jpg');
+
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('6','img/valorant/valorant.jpg');
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('6','img/valorant/torneo.jpg');
+
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('7','img/fortnite/fortnite.jpg');
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('7','img/fortnite/torneo.jpg');
+
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('8','img/rocket/RocketLeague.jpg');
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('8','img/rocket/torneo.jpg');
+
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('9','img/warzone/warzone.jpg');
+INSERT INTO imagenes (idEV, rutaImg) VALUES ('9','img/warzone/torneo.jpg');
+
+
+#Insertamos en la tabla comentarios
+
+INSERT INTO comentarios (idEV, usuario, fecha, comentario) VALUES ('1','Raúl Rodríguez','12 de junio de 2019 a las 9:15','Voy a ganar este torneo!!!');
+INSERT INTO comentarios (idEV, usuario, fecha, comentario) VALUES ('1','Santiago','3 de abril de 2019 a las 12:10','El fifa de este año no me gusta, tiene unos graficos muy malos');
+
+INSERT INTO comentarios (idEV, usuario, fecha, comentario) VALUES ('2','Raúl Castro','19 de junio de 2018 a las 9:45','El lol es muy tóxico');
+
+INSERT INTO comentarios (idEV, usuario, fecha, comentario) VALUES ('3','Pepe','17 de junio de 2020 a las 19:45','Soy el mejor, os voy a ganar');
+
+INSERT INTO comentarios (idEV, usuario, fecha, comentario) VALUES ('4','Papo','16 de junio de 2021 a las 12:45','¿Cuando empieza el torneo entonces?');
+
+INSERT INTO comentarios (idEV, usuario, fecha, comentario) VALUES ('5','Pepa','15 de junio de 2021 a las 14:45','Los juegos de cartas son muy aburridas');
+
+INSERT INTO comentarios (idEV, usuario, fecha, comentario) VALUES ('6','Laura','14 de junio de 2021 a las 2:45','Que ilusión por jugar ya');
+
+INSERT INTO comentarios (idEV, usuario, fecha, comentario) VALUES ('7','Luis','13 de junio de 2021 a las 3:45','Mi hermano pequeño esta enfermo jugando a este juego');
+
+INSERT INTO comentarios (idEV, usuario, fecha, comentario) VALUES ('8','Cristian','12 de junio de 2021 a las 6:45','Era un domingo en la tarde...');
+
+INSERT INTO comentarios (idEV, usuario, fecha, comentario) VALUES ('9','Ángel','11 de junio de 2021 a las 4:45','El cod es muy tóxico');
+
+
+#Insertamos en la tabla malasPalabras
+
+INSERT INTO malasPalabras (mala) VALUES ('puto');
+INSERT INTO malasPalabras (mala) VALUES ('puta');
+INSERT INTO malasPalabras (mala) VALUES ('tonto');
+INSERT INTO malasPalabras (mala) VALUES ('maricon');
+INSERT INTO malasPalabras (mala) VALUES ('feo');
+INSERT INTO malasPalabras (mala) VALUES ('guarra');
+INSERT INTO malasPalabras (mala) VALUES ('gilipollas');
+INSERT INTO malasPalabras (mala) VALUES ('subnormal');
+INSERT INTO malasPalabras (mala) VALUES ('pito');
+INSERT INTO malasPalabras (mala) VALUES ('pene');
+INSERT INTO malasPalabras (mala) VALUES ('coño');
