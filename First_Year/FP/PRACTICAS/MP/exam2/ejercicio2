@@ -1,0 +1,24 @@
+#!/bin/bash
+
+function _ComprValArg()
+{
+
+
+if [ $1 != 1 ] ; then 
+echo "Error, pruebe ejercicio2 <archivo_stock>"
+	
+   exit 1
+	
+fi
+
+	
+
+if ! test -d $2 || ! test -r $2; then 
+	
+  echo "No existe el directorio $2 o no tiene permisos de lectura" 
+	 
+ exit 1
+
+	fi
+ 
+}
