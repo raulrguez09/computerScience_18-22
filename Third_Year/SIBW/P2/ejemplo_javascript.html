@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <title>My test page</title>
+  </head>
+  <body>
+    <p>This is my page</p>
+    <form class="comentarios" name="comentarios" id="comentarios">
+        <ul>
+            <li>
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombre" name="user_name">
+            </li>
+            <li>
+              <label for="mail">Correo electrónico:</label>
+              <input type="email" id="mail" name="user_mail">
+            </li>
+            <li>
+              <label for="msg">Mensaje:</label>
+              <textarea id="msg" name="user_msg"></textarea>
+            </li>
+        </ul>
+        <li class="button">
+            <button type="submit" onclick="commentBox();">Envíe su mensaje</button>
+        </li>
+    </form>
+    <script src="comentarios.js"></script>
+  </body>
+</html>
+
