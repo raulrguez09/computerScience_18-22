@@ -1,6 +1,0 @@
-<map id="puntoMedio" name="puntoMedio">
-<area shape="rect" id="node2" href="$classPunto.html#a51ae6616f828bb2b4111bc8ace49dbca" title="Asigna el valor nuevoX a la coordenada x del punto. " alt="" coords="143,5,233,32"/>
-<area shape="rect" id="node3" href="$classPunto.html#a0b37a2333238d01ed3125826261a9654" title="Devuelve la coordenada x del punto. " alt="" coords="143,56,233,83"/>
-<area shape="rect" id="node4" href="$classPunto.html#a6a0f8adb5946f31a7867a06f54d97462" title="Asigna el valor nuevoY a la coordenada y del punto. " alt="" coords="143,107,233,133"/>
-<area shape="rect" id="node5" href="$classPunto.html#ad23e5570bd931af6f73ec0ede9511b27" title="Devuelve la coordenada y del punto. " alt="" coords="143,157,233,184"/>
-</map>
