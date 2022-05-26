@@ -1,0 +1,114 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: white;
+}
+
+h1 {
+    font-size: 20px;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+/* -------------------------------- */
+/* ---- SECCION DE LA CABECERA ---- */
+.cabecera {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cabecera h1 {
+    text-align: center;
+    font-size: 450%;
+    display: inline-block;
+    margin: auto;
+
+    display: inline-flexbox;
+    vertical-align: middle;
+}
+
+.cabecera img {
+    height: 100px;
+    width: 120px;
+    margin: auto;
+    padding-bottom: 1%;
+    display: flex;
+}
+
+.menu {
+    display: none;
+}
+
+/* -------------------------------- */
+/* ---- SECCION DE AGRUPAR ---- */
+.agrupar {
+    width: 80%;
+    margin: 30px auto;
+    padding: 15px;
+}
+
+/* -------------------------------- */
+/* ---- SECCION DE EVENTO FIFA ---- */
+.evento_fifa {
+    text-align: center;
+}
+
+.evento_fifa>h1 {
+    font-size: 300%;
+    text-decoration: underline;
+}
+
+.evento_fifa>h2 {
+    color: grey;
+}
+
+.evento_fifa>h3 {
+    font-style: italic;
+}
+
+.evento_fifa .parrafo1{
+    text-align: justify;
+}
+
+.evento_fifa .parrafo2{
+    margin-top: 20px;
+    text-align: justify;
+}
+
+.events-wrapper {
+    display: flex;
+    flex-wrap: wrap;  /* Continuen las imagenes hacia debajo en vez de a la dcha*/
+    align-items: baseline; /* Alineen por debajo*/
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.events-wrapper .event-logo{
+    height: 200px;
+    width: 350px;
+    object-fit: cover;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ---- SECCION DE LA COLUMNA ---- */
+.columna{
+    display: none;
+}
+
+/* -------------------------------- */
+/* ---- SECCION DEL FOOTER ---- */
+.pie{
+    clear: both;
+    padding: 20px;
+    text-align: center;
+}
+
+.pie .copyright {
+    height: 15px;
+    width: 15px;
+}
