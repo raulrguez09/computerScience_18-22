@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<category>
+    <pattern> _ <set>especifica_dia</set> <set>complemento</set></pattern>
+    <template>
+        <think>
+            <set var="fecha"><star index="2"/></set>
+            <set var="hora"><srai>TOP <star index="3"/></srai></set>
+        </think>
+        <think>
+            <condition var="fecha">
+                <li value="unknown"></li>
+                <li value="hoy">
+                    <set var="fecha"><srai>FECHA HOY</srai></set>
+                </li>
+                <li value="manyana">
+                    <set var="fecha"><srai>FECHA MANYANA</srai></set>
+                </li>
+                <li value="pasado manyana">
+                    <set var="fecha"><srai>FECHA PASADO MANYANA</srai></set>
+                </li>
+            </condition>
+        </think>
+            <condition var="hora">
+                <li value="unknown"></li>
+                <li value="a">
+                    <think>
+                        <set name="fecha"><srai>CAMBIAFECHA <get var="fecha"/></srai></set>
+                    </think>
+                    <srai>CITACONHORA <srai>SELECTITEM 3 IN  <star index="3"/></srai></srai>
+                </li>
+                <li value="por">
+                    <think>
+                        <set name="fecha"><srai>CAMBIAFECHA <get var="fecha"/></srai></set>
+                    </think>
+                    <srai>CITAAM/PM <srai>SELECTITEM 3 IN  <star index="3"/></srai></srai>
+                </li>
+            </condition>
+    </template>
+</category>
+
+<category>
+    <pattern> _ <set>especifica_dia</set> <set>meses</set> <set>complemento</set></pattern>
+    <template>
+        <think>
+            <set var="fecha"><star index="2"/> <star index="3"/></set>
+            <set var="hora"><srai>TOP <star index="4"/></srai></set>
+            <set name="fecha"><srai>CAMBIAFECHA <get var="fecha"/></srai></set>
+        </think>
+            <condition var="hora">
+                <li value="unknown"></li>
+                <li value="a">
+                    <srai>CITACONHORA <srai>SELECTITEM 3 IN  <star index="4"/></srai></srai>
+                </li>
+                <li value="por">
+                    <srai>CITAAM/PM <srai>SELECTITEM 3 IN  <star index="4"/></srai></srai>
+                </li>
+            </condition>
+    </template>
+</category>
+
+<category>
+    <pattern> _ [proximo siguiente] <set>weekday_es</set> </pattern>
+    <template>
+        <set var="fecha"><srai>DAYNEXTWEEK <star index="2"/></srai></set>
+        <srai>QUISIERA UNA CITA PARA EL <get var="fecha"/></srai>
+    </template>
+</category>
+    
+<category>
+    <pattern> _ [proximo siguiente] <set>weekday_es</set> <set>complemento</set></pattern>
+    <template>
+        <think>
+            <set var="fecha"><srai>DAYNEXTWEEK <star index="2"/></srai></set>
+            <set var="hora"><srai>TOP <star index="3"/></srai></set>
+            <set name="fecha"><srai>CAMBIAFECHA <get var="fecha"/></srai></set>
+        </think>
+            <condition var="hora">
+                <li value="unknown"></li>
+                <li value="a">
+                    <srai>CITACONHORA <srai>SELECTITEM 3 IN  <star index="3"/></srai></srai>
+                </li>
+                <li value="por">
+                    <srai>CITAAM/PM <srai>SELECTITEM 3 IN  <star index="3"/></srai></srai>
+                </li>
+            </condition>
+    </template>
+</category>
+<!--FECHA HOY-->
+<category>
+    <pattern>FECHA HOY</pattern>
+    <template>
+        <think>
+            <set var="date"><date jformat="dd MMMMMMMMM"/></set>
+            <set var="fecha">
+                <srai>TOP <get var="date"/></srai> de <srai>SELECTITEM 2 IN <get var="date"/></srai>  
+            </set>
+        </think>
+        <get var="fecha"/>
+    </template>
+</category>
+<!--FECHA MAÑANA-->
+<category>
+    <pattern>FECHA MANYANA</pattern>
+    <template>
+        <think>
+            <set var="date"><srai>DATE TOMORROW</srai></set>
+            <set var="fecha">
+                <srai>TOP <get var="date"/></srai> de <srai>SELECTITEM 2 IN <get var="date"/></srai>  
+            </set>
+        </think>
+        <get var="fecha"/>
+    </template>
+</category>
+<!--FECHA PASADO MAÑANA-->
+<category>
+    <pattern>FECHA PASADO MANYANA</pattern>
+    <template>
+        <think>
+            <set var="date"><srai>DAYAFTERTOMORROWDATE</srai></set>
+            <set var="fecha">
+                <srai>TOP <get var="date"/></srai> de <srai>SELECTITEM 2 IN <get var="date"/></srai>  
+            </set>
+        </think>
+        <get var="fecha"/>
+    </template>
+</category>
+<!--CITA CON HORA-->
+<category>
+    <pattern>CITACONHORA *</pattern>
+    <template>
+        <think>
+            <set var="if"><srai>IS BUSY DAY <get name="fecha"/> AT <star/></srai></set>
+        </think>
+            <condition var="if">
+            <li value="TRUE">
+                Lo siento pero a esa hora no hay hueco, ¿desea otra hora?
+                <think><set name="topic">hora</set></think>
+            </li>
+            <li value="FALSE">
+                <srai>A LAS <star/></srai>
+            </li>   
+            </condition>
+    </template>
+</category>
+<category>
+    <pattern>las *</pattern>
+    <that>Digame entonces a que hora quiere que busque</that>
+    <template><srai>CITACONHORA <star/></srai></template>
+</category>
+<!--CITA POR LA MANYANA/TARDE-->
+ <category>
+    <pattern>CITAAM/PM *</pattern>
+    <template>
+        <think>
+            <set var="am/pm"><star/></set>
+            <set var="lista"><map name="eventos"><get name="fecha"/></map></set>
+            <set var="sublista"><srai>SUBLIST FROM 9 TO 21 OF <get var="lista"/></srai></set>
+            <set var="libre"><srai>FINDITEM null IN <get var="sublista"/></srai></set>
+
+            <condition var="libre">
+                <li value="0"><set var="opc">Lo siento ese dia esta todo ocupado, ¿quieres que mire en otro dia?</set></li>
+                <li>
+                    <set var="horaslibres"><srai>HORASLIBRESEN <get var="sublista"/></srai></set>
+                    <condition var="am/pm">
+                        <li value="manyana">
+                            <set var="h_am"><srai>HORAS MANYANA EN <get var="horaslibres"/></srai></set>
+                            <set var="nh_am"><srai>COUNT <get var="h_am"/></srai></set>
+                            <set var="ultham">
+                                <srai>SELECTITEM <get var="nh_am"/> IN <get var="h_am"/></srai>
+                            </set>
+                            <set var="opc">Okey, pues para ese dia tengo hueco por la manyana a las <get var="h_am"/> 
+                                         ¿A que hora le viene mejor?</set>
+                            <condition var="nh_am">
+                                <li value="5">
+                                    <set var="opc2_am"><srai>TOP <get var="h_am"/></srai> a <get var="ultham"/></set>
+                                    <set var="opc">Okey, pues por la manyana tengo hueco de <get var="opc2_am"/> ¿A que hora le viene mejor?</set>
+                                </li>
+                            </condition>
+                        </li>
+                        <li value="tarde">
+                            <set var="h_pm"><srai>HORAS tarde EN <get var="horaslibres"/></srai></set>
+                            <set var="nh_pm"><srai>COUNT <get var="h_pm"/></srai></set>
+                            <set var="ulthpm">
+                                <srai>SELECTITEM <get var="nh_pm"/> IN <get var="h_pm"/></srai>
+                            </set>
+                            <set var="opc">Okey, pues para ese dia tengo hueco por la tarde a las <get var="h_pm"/> 
+                            ¿A que hora le viene mejor?</set>
+                            <condition var="nh_pm">
+                                <li value="8">
+                                    <set var="opc2_pm"><srai>TOP <get var="h_pm"/></srai> a <get var="ulthpm"/></set>
+                                    <set var="opc">Okey, pues por la tarde tengo hueco de <get var="opc2_pm"/> ¿A que hora le viene mejor?</set>
+                                </li>
+                            </condition>
+                        </li>
+                    </condition>
+                </li>
+            </condition>
+        </think>
+        Muy bien voy a ver si hay hueco, espere un momentito por favor...
+       <get var="opc"/>
+    </template>
+</category>
+<!--QUIERE OTRA HORA?-->
+<topic name="hora">
+    <category>
+        <pattern>SI</pattern>
+        <template>
+            Digame entonces a que hora quiere que busque
+        </template>
+    </category>
+</topic>
+<!--FECHA EN UNA SEMANA-->
+<category>
+    <pattern>DAYNEXTWEEK *</pattern>
+    <template>
+        <think>
+            <set var="day"><star/></set>
+            <set var="dias"><srai>DAYS UNTIL <get var="day"/></srai></set>
+            <set var="fecha"><srai>DATE IN <get var="dias"/> DAYS</srai></set>
+            <set var="fecha">
+                <srai>TOP <get var="fecha"/></srai> de <srai>SELECTITEM 2 IN <get var="fecha"/></srai>  
+            </set>
+        </think>
+        <get var="fecha"/>
+    </template>
+</category>
+</aiml>

@@ -1,0 +1,8 @@
+name:botForIA
+email:nobody@nowhere.com
+gender:male
+botmaster:Raul	
+organization:ugr
+version:0.0.4
+age:20
+job:estudiante

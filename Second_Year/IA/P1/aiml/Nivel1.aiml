@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Regla general para pedir citas-->
+<category>
+    <pattern>QUISIERA UNA CITA PARA EL *</pattern>
+    <template>
+        <think>
+            <set var="fecha"><srai>CAMBIAFECHA <star/></srai></set>
+            <set var="lista"><map name="eventos"><get var="fecha"/></map></set>
+            <set var="sublista"><srai>SUBLIST FROM 9 TO 21 OF <get var="lista"/></srai></set>
+            <set var="libre"><srai>FINDITEM null IN <get var="sublista"/></srai></set>
+
+            <condition var="libre">
+                <li value="0"><set var="opc">Lo siento ese dia esta todo ocupado, ¿quieres que mire en otro dia?</set></li>
+                <li>
+                    <set var="horaslibres"><srai>HORASLIBRESEN <get var="sublista"/></srai></set>
+                    <set var="h_am"><srai>HORAS MANYANA EN <get var="horaslibres"/></srai></set>
+                    <set var="h_pm"><srai>HORAS TARDE EN <get var="horaslibres"/></srai></set>
+                    <set var="nh_am"><srai>COUNT <get var="h_am"/></srai></set>
+                    <set var="nh_pm"><srai>COUNT <get var="h_pm"/></srai></set>
+                    <set var="ultham">
+                        <srai>SELECTITEM <get var="nh_am"/> IN <get var="h_am"/></srai>
+                    </set>
+                    <set var="ulthpm">
+                        <srai>SELECTITEM <get var="nh_pm"/> IN <get var="h_pm"/></srai>
+                    </set>
+                    <set var="opc1_am"><get var="h_am"/></set>
+                    <set var="opc1_pm"><get var="h_pm"/></set>
+                    <set var="opc">Okey, pues para ese dia tengo hueco por la manyana a las <get var="h_am"/>
+                                          y por la tarde a las <get var="h_pm"/> ¿A que hora le viene mejor?</set>  
+
+                    <condition var="nh_am">
+                        <li value="5">
+                            <set var="opc2_am"><srai>TOP <get var="h_am"/></srai> a <get var="ultham"/></set>
+                        </li>
+                    </condition>
+                    <condition var="nh_pm">
+                        <li value="8">
+                            <set var="opc2_pm"><srai>TOP <get var="h_pm"/></srai> a <get var="ulthpm"/></set>
+                        </li>
+                    </condition>
+
+                    <condition var="opc2_am">
+                        <li value="unknown">
+                            <condition var="opc2_pm">
+                                <li value="unknown"></li>
+                                <li>    
+                                    <set var="opc">Okey, pues para ese dia tengo hueco por la manyana a las <get var="opc1_am"/> 
+                                         y por la tarde de <get var="opc2_pm"/> ¿A que hora le viene mejor?</set>
+                                </li>
+                            </condition>
+                        </li>
+                        <li>
+                           <condition var="opc2_pm">
+                                <li value="unknown">
+                                    <set var="opc">Okey, pues para ese dia tengo hueco por la manyana de <get var="opc2_am"/> y por la tarde a las 
+                                 <get var="opc1_pm"/> ¿A que hora le viene mejor?</set>
+                                </li>
+                                <li>
+                                    <set var="opc">Okey, pues para ese dia tengo hueco por la manyana de <get var="opc2_am"/> y por la tarde de 
+                                    <get var="opc2_pm"/> ¿A que hora le viene mejor?</set>
+                                </li>
+                            </condition> 
+                        </li>
+                    </condition>
+
+                    <condition var="opc1_am">
+                        <li value="unknown">
+                            <set var="opc">Okey, pues para ese dia tengo hueco por la tarde a las <get var="h_pm"/>
+                    ¿A que hora le viene mejor?</set>
+                        </li>
+                    </condition>
+
+                    <condition var="opc1_pm">
+                        <li value="unknown">
+                            <set var="opc">Okey, pues para ese dia tengo hueco por la manyana a las <get var="h_am"/> 
+                                   ¿A que hora le viene mejor?</set>
+                        </li>
+                    </condition>
+                </li> 
+            </condition>
+        </think>
+        Muy bien voy a ver si hay hueco, espere un momentito por favor...
+       <get var="opc"/>
+    </template>
+</category>
+ 
+<category>
+    <pattern>SI</pattern>
+    <template>Perfecto, dime que dia quieres que mire</template>
+</category>
+
+<category>
+    <pattern>ME DA IGUAL</pattern>
+    <template>
+        <think>
+            <set var="lista"><map name="eventos"><get name="fecha"/></map></set>
+            <set var="sublista"><srai>SUBLIST FROM 9 TO 21 OF <get var="lista"/></srai></set>
+            <set var="horaslibres"><srai>HORASLIBRESEN <get var="sublista"/></srai></set>
+            <set var="hora"><srai>TOP <get var="horaslibres"/></srai></set>
+        </think>
+        okey, entonces le asigno la cita a las <get var="hora"/>
+       <srai>a LAS <get var="hora"/></srai>
+    </template>
+</category>
+
+<category>
+    <pattern>NO</pattern>
+    <template>okey muchas gracias por llamar, que tenga buen dia :)</template>
+</category>
+
+<category>
+    <pattern>* LAS *</pattern>
+    <template>
+        <think>
+            <set name="hr"><star index="2"/></set>
+        </think>
+        Perfecto, diganme un nombre y lo apunto en la lista 
+    </template>
+</category>
+
+<category>
+    <pattern><set>nombres</set></pattern>
+    <template>
+        <srai>MARK ocupado AT <get name="hr"/> ON <get name="fecha"/></srai> 
+        Perfecto <star/>, ya esta asignada su cita
+       ¿Desea alguna otra?
+    </template>
+</category>
+
+<category>
+    <pattern> ^ EL *</pattern>
+    <template><srai>QUISIERA UNA CITA PARA EL <star index="2"/></srai></template>
+</category>
+
+
+<!-- Regla que dada una lista de horas, devuelve una sublista de las horas de manyana o tarde-->
+<category>
+    <pattern>HORAS * EN *</pattern>
+    <template>
+        <think>
+            <set var="cond"><srai>COMPARE Manyana WITH <star/></srai></set>
+            <condition var="cond">
+                <li value="YES"><set var="am/pm">Manyana</set></li>
+                <li><set var="am/pm">Tarde</set></li>
+            </condition>
+            <set var="lista"><star index="2"/></set> 
+            <set var="*it"><srai>ITERATE <get var="lista"/></srai></set>
+        </think>
+            <condition var="*it">
+				<li value="$"></li>
+                <li>
+                    <think>
+                        <set var="if"><srai>COMPARE <get var="am/pm"/> WITH <srai>AMPM <get var="*it"/></srai></srai></set>
+                    </think>
+                    <condition var="if">
+                        <li value="NO"></li>
+                        <li>
+                            <think>
+                                <set var="reslista"><srai>ANIADEALFINAL <get var="*it"/> EN <get var="reslista"/></srai></set>
+                            </think>
+                        </li>
+                    </condition>    
+                    <think>
+                        <set var="*it"><srai>NEXT</srai></set>
+                    </think>
+                    <loop/>
+                </li> 
+            </condition>
+        <get var="reslista"/>    
+    </template>
+</category>
+
+<category>
+    <pattern>AMPM *</pattern>
+    <template>
+        <think>
+            <set var="hora"><star/></set>
+            <condition var="hora">
+                <li value="08:00"><set var="res">Manyana</set></li>
+                <li value="09:00"><set var="res">Manyana</set></li>
+                <li value="10:00"><set var="res">Manyana</set></li>
+                <li value="11:00"><set var="res">Manyana</set></li>
+                <li value="12:00"><set var="res">Manyana</set></li>
+                <li value="13:00"><set var="res">Tarde</set></li>
+                <li value="14:00"><set var="res">Tarde</set></li>
+                <li value="15:00"><set var="res">Tarde</set></li>
+                <li value="16:00"><set var="res">Tarde</set></li>
+                <li value="17:00"><set var="res">Tarde</set></li>
+                <li value="18:00"><set var="res">Tarde</set></li>
+                <li value="19:00"><set var="res">Tarde</set></li>
+                <li value="20:00"><set var="res">Tarde</set></li>
+            </condition>
+        </think>
+        <get var="res"/>    
+</template> 
+</category>
+<!-- Regla que dado una lista de null/ocupado (se supone que la lista es de 13 elementos 08:00-20:00) te devuelve las horas que estan libres -->
+<category>
+	<pattern>HORASLIBRESEN * </pattern>
+	    <template>
+            <think>
+                <set var="lista"> <star/> </set>
+                <set var="*it"><srai>ITERATE <get var="lista"/></srai></set>
+                <set var="cont">1</set>
+            </think>
+            <condition var="*it">
+				<li value="$"></li>
+                <li>
+                    <think>
+                    <set var="if"><srai>COMPARE null WITH <srai>SELECTITEM <get var="cont"/> IN <get var="lista"/></srai></srai></set>
+                    </think>
+                    <condition var="if">
+                        <li value="NO"></li>
+                        <li>
+                            <think>
+                            <set var="pos"><srai>SUMA <get var="cont"/> 8 </srai></set>
+                            <set var="hora"><map name="horario"><get var="pos"/></map>:00</set>
+                            <set var="horas_libres"><srai>ANIADEALFINAL <get var="hora"/> EN <get var="horas_libres"/></srai></set>
+                            </think>
+                        </li>
+                    </condition>    
+                    <think>
+                        <set var="*it"><srai>NEXT</srai></set>
+                        <set var="cont"><srai>PLUS <get var="cont"/> 1</srai></set>
+                    </think>
+                    <loop/>
+                </li> 
+            </condition>
+            <get var="horas_libres"/>
+	    </template>
+</category>
+
+<!-- Regla que aniade una palabra al principio de una frase -->
+<category>
+	<pattern>ANIADE * EN * </pattern>
+	<template>
+		<think>
+			<set var="set"><star index="2"/></set>
+			<set var="pos"><star/></set>
+			<set var="where"><srai>COUNT <get var="set"/></srai></set>
+			<condition var="where">
+				<li value="0"><set var="set"><star/></set></li>
+				<li><set var="set"><star/> <get var="set"/></set></li>
+			</condition>
+        </think>
+		<get var="set"/>
+	</template>
+</category>
+
+<!-- Regla que aniade una palabra al FINAL de una frase -->
+<category>
+	<pattern>ANIADEALFINAL * EN * </pattern>
+	<template>
+		<think>
+            <set var="frase"><star index="2"/></set>
+			<set var="pos"><srai>COUNT <star index="2"/></srai></set>
+			<condition var="frase">
+				<li value="unknown">
+                    <set var="frase"><star/></set>
+                </li>
+				<li><set var="frase"><get var="frase"/> <star/></set></li>
+			</condition>
+        </think>
+		<get var="frase"/>
+	</template>
+</category>
+
+<!-- Regla que tranforma una fecha de la forma "dd-mmmmmmmmmm-yy" en "dd-mm-yy" -->
+<category>
+	<pattern>CAMBIAFECHA * </pattern>
+	<template>
+        <think>
+            <set var="anio">20</set>
+            <set var="dia"><srai>TOP <star/></srai></set>
+                <set var="cont"><srai>COUNT <srai>DELETREA <get var="dia"/></srai></srai></set>
+            <condition var="cont">
+				<li value="2"></li>
+				<li>
+                    <set var="dia">0<get var="dia"/></set>
+                    <set var="dia"><srai>decode <get var="dia"/></srai></set>
+                </li>
+			</condition>
+            <set var="mes">
+                <map name="meses"><srai>SELECTITEM 3 IN <star/></srai></map>
+            </set>
+            <set name="fecha"><get var="anio"/></set>
+            <set name="fecha">
+                <srai>ANIADE <get var="mes"/> EN <get name="fecha"/></srai>
+            </set>
+            <set name="fecha">
+                <srai>ANIADE <get var="dia"/> EN <get name="fecha"/></srai>
+            </set>
+            <set name="fecha">
+                <srai>decode <get name="fecha"/></srai> 
+            </set>
+        </think>
+    <get name="fecha"/>
+	</template>
+</category>
+</aiml>

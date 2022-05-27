@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!--Pregunta número 1-->
+<category>
+    <pattern>HABLAME UN POCO DE TI</pattern>
+    <template>
+        Soy un apasionado del mundo de la informatica desde que era pequeño, y eso me ha impulsado
+       a enfocar mi carrera en aprender y enriquecerme sobre lo que, para mi y para muchas personas, 
+       es el futuro.
+    </template>
+</category>
+<!--Respuestas para la pregunta número 1-->
+<category>
+    <pattern>^ [DEFIN+ DESCRIB+] ^</pattern>
+    <template><srai>HABLAME UN POCO DE TI</srai></template>
+</category>
+
+<category>
+    <pattern>* ti ^</pattern>
+    <template><srai>HABLAME UN POCO DE TI</srai></template>
+</category>
+
+<!--Pregunta número 2-->
+<category>
+    <pattern>CUAL ES TU MAYOR DEFECTO</pattern>
+    <template>
+        Soy una persona que de primeras puede aparentar ser introvertida y eso, a veces, a determinadas
+       personas les crea un rechazo o no favorece el acercamiento en una primera instancia. Pero a lo 
+       largo de mis estudios, me he forzado a trabajar en equipo y he logrado, poco a poco, causar mucha 
+       mejor impresión y ser mucho más expresivo.
+    </template>
+</category>
+
+<!--Respuestas para la pregunta número 2-->
+<category>
+    <pattern>^ TU *</pattern>
+    <template><srai>CUAL ES TU MAYOR DEFECTO</srai></template>
+</category>
+
+<category>
+    <pattern>QUE ES LO PEOR *</pattern>
+    <template><srai>CUAL ES TU MAYOR DEFECTO</srai></template>
+</category>
+
+<!--Pregunta número 3-->
+<category>
+    <pattern>CUALES SON TUS 3 MAYORES VIRTUDES</pattern>
+    <template>
+        Yo diria que mis mejores virtudes son, en primer lugar, que tengo bastante predisposicion a aprender
+       cosas nuevas, no tengo miedo a expermientar con conocimiento desconocido. Por otro lado, diria que 
+       trabajo muy bien en equipo, ya que desde pequeño me han inculcado los valores y las herramientas necesarias 
+       para conseguir buenos resultados en grupo. Y además soy una persona que se adapta a cualquier situacion
+       de forma eficiente y eficaz, ya que en este mundo de la informatica pienso que debemos estar preparados 
+       para lo inesperado
+    </template>
+</category>
+
+<!--Respuestas para la pregunta número 3-->
+<category>
+    <pattern>* [tres 3] *</pattern>
+    <template><srai>CUALES SON TUS 3 MAYORES VIRTUDES</srai></template>
+</category>
+
+<category>
+    <pattern>EN QUE *</pattern>
+    <template><srai>CUALES SON TUS 3 MAYORES VIRTUDES</srai></template>
+</category>
+
+<!--Pregunta número 4-->
+<category>
+    <pattern>TE CONSIDERAS UNA PERSONA CREATIVA</pattern>
+    <template>
+        A nivel personal no creo que sea una persona muy creativa, que siempre se le ocurran ideas originales
+       e innovadoras continuamente. Pero si que en determinadas ocasiones soy capaz de pensar y conseguir plasmar
+       dichas ideas. Además creo que debo destacar que se me da bastante bien reflexionar sobre las diversas
+       formas de abordar un problema y eso, tanto indivual como en grupo, pienso que es un aspecto a tener en cuenta
+    </template>
+</category>
+
+<!--Respuestas para la pregunta número 4-->
+<category>
+    <pattern> * <set>creativa</set> ^ </pattern>
+    <template><srai>TE CONSIDERAS UNA PERSONA CREATIVA</srai></template>
+</category>
+
+<!--Pregunta número 5-->
+<category>
+    <pattern>POR QUE DEBERIAMOS ESCOGERTE A TI</pattern>
+    <template>
+        Considero que tengo una trayectoria que me avala, y en la que me he esforzado mucho para llegar a tener
+       un amplio conocimiento de este medio, además, pienso que puedo aportar mucho a este trabajo ya que el 
+       perfil que se busca se ajusta mucho al mio, y podria, no solo aportar buenos resultados, sino ayudar a 
+       que la empresa consiga sus objetivos. Además con mi conocimiento sobre el trabajo en grupo creo que puedo
+       llegar a impulsar en gran medida el trabajo de todos mis compañeros.
+    </template>
+</category>
+
+<!--Respuestas para la pregunta número 5-->
+<category>
+    <pattern>POR QUE [DEBERIAMOS TENDRIAMOS] *</pattern>
+    <template><srai>POR QUE DEBERIAMOS ESCOGERTE A TI</srai></template>
+</category>
+
+<category>
+    <pattern>* [EMPRESA EQUIPO] ^</pattern>
+    <template><srai>POR QUE DEBERIAMOS ESCOGERTE A TI</srai></template>
+</category>
+
+<category>
+    <pattern>QUE TE DIFERENCIA DEL RESTO</pattern>
+    <template><srai>POR QUE DEBERIAMOS ESCOGERTE A TI</srai></template>
+</category>
+
+</aiml>
