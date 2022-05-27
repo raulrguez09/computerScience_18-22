@@ -1,0 +1,309 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Sensores P4</title>
+	</head>
+	<body>
+		<header class="cabecera">
+			<h1> Sensores sistema domótico </h1>
+		</header>
+		<div class="agrupar">
+			<div id="pagUser"><a style="color: white;" href="usuario.html">Página usuario</a></div>
+			<div class="sensores">
+				<div class="parte1">
+					<h2 style="margin-left: 15px;"> Simulador de valores </h2><br>
+					<!--Formulario para simular valores en los sensores-->
+					<form id="formulario" action="javascript:void(0);" onsubmit="javascript:enviar();">
+						Valor a simular: <input type="label" id="val1"/><br/><br/>
+						Sensor a simular:
+						<select id="sensores">
+							<option value="temperatura">Temperatura</option>
+							<option value="luminosidad">Luminosidad</option>
+							<option value="humedad">Humedad</option>
+						</select><br/><br/>
+						<input id="boton" type="submit" value="Simular"/>
+					</form>
+				</div>
+				<div class="parte2">
+					<h2> Valores de los sensores </h2><br>
+					<div id="actuadores"></div>
+				</div>
+			</div>
+
+			<h3 id="tituloAgente"> Respuesta del agente </h3>
+			<div id="mensajes"></div>
+			
+			
+			<div id="container-register">
+				<h4 style="margin-bottom: 5px;">Registro de la modificacion de valores</h4>
+				<div id="resultados"></div>
+			</div>
+	
+			<div id="container-user">
+				<h4 style="margin-bottom: 5px;">Usuarios activos en el sistema</h4>
+				<span id="usuarios"></span>
+			</div>
+		</div>
+
+		
+		<style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: #f5f8f9;
+			}
+
+			h1 {
+				font-size: 20px;
+				font-family: sans-serif;
+				font-weight: bold;
+			}
+
+			a:link {
+				text-decoration: none;
+				color:whitesmoke;   
+			}
+
+			a:visited {
+				text-decoration: none;
+				color: whitesmoke;
+			}
+
+			/* -------------------------------- */
+			/* ---- SECCION DE LA CABECERA ---- */
+			.cabecera {
+				background-color: rgb(255, 255, 255);
+				text-align: center;
+				margin-left: auto;
+				margin-right: auto;
+				position: relative;
+			}
+
+			/* TITULO */
+			.cabecera h1 {
+				text-align: center;
+				font-size: 450%;
+				display: inline-block;
+				margin: auto;
+				display: inline-flexbox;
+				vertical-align: middle;
+			}
+			.agrupar {
+				background-color: white;
+				width: 80%;
+				height: 100%;
+				margin: 30px auto;
+				padding: 15px;
+				overflow:hidden
+			}
+
+			.agrupar .sensores{
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.agrupar .sensores .parte1{
+				width: 31%;
+				height: 20%;
+				margin-top:30px;
+				margin-left: 150px;
+			}
+
+			.agrupar .sensores .parte1 #formulario{
+				border: black solid 1px;
+				border-radius: 20px;
+				padding-top: 5px;
+				padding-left: 5px;
+				padding-bottom: 5px;
+			}
+
+			#boton{
+				margin-left: 120px;
+			}
+
+			.agrupar .sensores .parte2{
+				width: 30%;
+				height: 20%;
+				margin-right: 200px;
+			}
+
+			.agrupar .sensores .parte2 #actuadores{	
+				border: black solid 1px;
+				border-radius: 20px;
+				width: 102%;
+				padding-top: 5px;
+				padding-left: 5px;
+				padding-bottom: 5px;
+			}
+
+			.agrupar #mensajes{
+				width: 100%;
+				margin-top: 20px;
+				height: 20%;
+
+				border: black solid 1px;
+				border-radius: 20px;	
+				margin-bottom: 20px;
+				padding-top: 5px;
+				padding-left: 5px;
+				padding-bottom: 5px;
+			}
+
+			.agrupar #tituloAGente{
+				width: 25%;
+				margin-left: 200px;
+			}
+
+			#pagUser{
+				position: absolute;
+				color: #FF0000;
+				margin-left: 950px;  
+				
+				padding-top: 4px;
+				padding-bottom: 4px;
+				background-color: black;
+				font: bold 15px sans-serif;
+			}
+
+			#pagUser:hover {
+				-webkit-transition: all 1s ease;
+				transition: all 1s ease;
+				background-color: blanchedalmond;
+			}
+
+			#container-user{
+				width: 35%;
+				position: absolute;
+				display: inline-block;
+				overflow: scroll;
+				height: 20%;
+				margin-left: 45%
+			}
+			#container-register{
+				width: 35%;
+				position: absolute;
+				display: inline-block;
+				overflow: scroll;
+				height: 20%;
+			}
+		</style>
+	</body>
+
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript">
+		var serviceURL = document.URL;
+		var socket = io.connect('http://localhost:8080');
+
+		//Método que envia los datos del formulario
+		function enviar() {
+			var d = new Date();
+			var val1 = document.getElementById("val1").value;
+			var sensor = document.getElementById("sensores").value;
+			socket.emit('valoresCaptados',{sensor: sensor, valor : val1, time : d});
+		}
+
+		//Método que obtiene la información de los usuarios y la muestra
+		socket.on('usuariosActivos',function(data){
+			mostrarUsuariosConectados(data,'usuarios');
+		})
+
+		//Método que obtiene la información del registro y la muestra
+		socket.on('obtenerRegistro',function(data){
+			mostrarRegistroModificaciones(data,'resultados');
+		});
+
+		//Método que obtiene los valores de los sensores y los usa para mostrarlo
+		socket.on('valorSensores',function(valores){
+            getValorSensores(valores);
+			getRespuestasAgente(valores);
+        });
+
+		//Método para mostrar los valores de los sensores
+        function getValorSensores(valores){
+			var persiana = "cerrada";
+			if(valores.estadoPersiana == true){
+				persiana = "abiera";
+			}
+
+			var aireAcon = "apagado";
+			if(valores.estadoAireAcondicionado == true){
+				aireAcon = "encendido";
+			}
+
+			var agente = "apagado";
+			if(valores.estadoAgenteDomotico == true){
+				agente = "encendido";
+			}
+
+
+			var calefaccion = "apagado";
+			if(valores.estadoCalefaccion == true){
+				calefaccion = "encendido";
+			}
+
+			var humidificador = "apagado";
+			if(valores.estadoHumidificador == true){
+				humidificador = "encendido";
+			}
+
+			var ventana = "cerrada";
+			if(valores.estadoVentana == true){
+				ventana = "abierta";
+			}
+			
+			var p = '<p> Temperatura: '+valores.temperatura+'ºC <br/>Luminosidad: '+ valores.luminosidad+'% <br/>Persiana: '+persiana+
+				'<br/>Estado Aire Acondicionado: '+aireAcon+'<br/>Estado del agente domótico: '+agente+
+				'<br/>Humedad: '+valores.humedad+'% <br/> Estado Calefacción: '+calefaccion+
+				'<br/>Estado Humidificador: '+humidificador+
+				'<br/>Estado ventana: '+ventana+'<br/>Velocidad viento: '+valores.viento+' km/h</p>';
+            
+			document.getElementById('actuadores').innerHTML = p;
+        }
+
+		//Método para mostrar las respuestas del agente
+		function getRespuestasAgente(valores){
+			console.log(valores.respuestasAgente[0]);
+			console.log(valores.respuestasAgente.length);
+			if(valores.respuestasAgente == ""){
+				respuestas = "Agente preparado para realizar sus funciones";
+			}
+			else{
+				var respuestas = [];
+				respuestas += '<p>'+ valores.respuestasAgente+'</p>';
+			}
+
+			document.getElementById('mensajes').innerHTML = respuestas;
+		}
+
+		//Método para mostrar el registro de las modificaciones
+		function mostrarRegistroModificaciones(valores,identificador){
+			var listContainer = document.getElementById(identificador);
+			listContainer.innerHTML = '';
+			var listElement = document.createElement('ul');
+			listContainer.appendChild(listElement);
+			var num = valores.length;
+			for(var i=0; i<num; i++) {
+	            var listItem = document.createElement('li');
+				listItem.innerHTML = JSON.stringify('El sensor de ' + valores[i].sensor + ' cambia su valor a ' + valores[i].valor + ' en la fecha: ' + valores[i].time);
+	            listElement.appendChild(listItem);
+			}
+	    }
+
+		//Método para mostrar los usuarios conectados
+		function mostrarUsuariosConectados(valores,identificador){
+			var listContainer = document.getElementById(identificador);
+			listContainer.innerHTML = '';
+			var listElement = document.createElement('ul');
+			listContainer.appendChild(listElement);
+			var num = valores.length;
+			for(var i=0; i<num; i++) {
+	            var listItem = document.createElement('li');
+				listItem.innerHTML = JSON.stringify('Nuevo usuario conectado en el puerto ' + valores[i].port);
+	            listElement.appendChild(listItem);
+			}
+	    }
+	</script>
+</html>

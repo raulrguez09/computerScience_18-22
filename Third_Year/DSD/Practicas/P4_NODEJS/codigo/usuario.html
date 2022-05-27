@@ -1,0 +1,268 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Usuarios P4</title>
+    </head>
+    <body>
+        <header class="cabecera">
+            <h1> Página usuario </h1>
+        </header>
+        <div class="agrupar">
+                <div class="sensores">
+                    <div class="parte1">
+                        <h2 style="margin-left: 15px;"> Valores de los sensores </h2><br>
+                        <div id="resultados"></div>
+                    </div>
+                    
+                    <div class="parte2">
+                        <h2 style="margin-left: 35px;"> Acciones manuales </h2><br>
+                        <div id="botones">
+                            <form onclick="apagarAireAcondicionado()">
+                                <input type="button" value="ON/OFF Aire Acondicionado"></input>
+                            </form>
+                            
+                            <form onclick="bajarPersiana()">
+                                <input type="button" value="ON/OFF Persiana"></input>
+                            </form>
+                            
+                            <form onclick="cerrarVentana()">
+                                <input type="button" value="ON/OFF Ventana"></input>
+                            </form>
+                            
+                            <form onclick="apagarHumidificador()">
+                                <input type="button" value="ON/OFF Humidificador"></input>
+                            </form>
+                            
+                            <form onclick="apagarCalefaccion()">
+                                <input type="button" value="ON/OFF Calefacción"></input>
+                            </form>
+                            
+                            <form onclick="apagarAgente()">
+                                <input type="button" value="ON/OFF Agente Domótico"></input>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 id="tituloAgente"> Respuesta del agente </h3>
+                <div id="mensajes"></div>
+        </div>
+
+        <style type="text/css">
+			*{
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				background-color: #f5f8f9;
+			}
+
+			h1 {
+				font-size: 20px;
+				font-family: sans-serif;
+				font-weight: bold;
+			}
+
+			a:link {
+				text-decoration: none;
+				color:whitesmoke;   
+			}
+
+			a:visited {
+				text-decoration: none;
+				color: whitesmoke;
+			}
+
+			/* -------------------------------- */
+			/* ---- SECCION DE LA CABECERA ---- */
+			.cabecera {
+				background-color: rgb(255, 255, 255);
+				text-align: center;
+				margin-left: auto;
+				margin-right: auto;
+				position: relative;
+			}
+
+			/* TITULO */
+			.cabecera h1 {
+				text-align: center;
+				font-size: 450%;
+				display: inline-block;
+				margin: auto;
+				display: inline-flexbox;
+				vertical-align: middle;
+			}
+			.agrupar {
+				background-color: white;
+				width: 80%;
+				height: 100%;
+				margin: 30px auto;
+				padding: 15px;
+				overflow:hidden
+			}
+
+			.agrupar .sensores{
+				display: flex;
+				justify-content: space-between;
+			}
+
+			.agrupar .sensores .parte1{
+				width: 31%;
+				height: 20%;
+				margin-top:30px;
+				margin-left: 150px;
+			}
+
+            .agrupar .sensores .parte1 #resultados{	
+				border: black solid 1px;
+				border-radius: 20px;
+				width: 102%;
+				padding-top: 5px;
+				padding-left: 5px;
+				padding-bottom: 5px;
+			}
+
+			.agrupar .sensores .parte2{
+				width: 30%;
+				height: 20%;
+				margin-right: 200px;
+                margin-top: 35px;
+			}
+
+            .agrupar .sensores .parte2 #botones{	
+				border: black solid 1px;
+				border-radius: 20px;
+				width: 102%;
+				padding-top: 5px;
+				padding-left: 5px;
+				padding-bottom: 5px;
+			}
+
+            .agrupar #tituloAGente{
+				width: 25%;
+				margin-left: 200px;
+                margin-top: 20px;
+			}
+
+			.agrupar #mensajes{
+				width: 100%;
+				margin-top: 20px;
+				height: 20%;
+
+				border: black solid 1px;
+				border-radius: 20px;	
+				margin-bottom: 20px;
+				padding-top: 5px;
+				padding-left: 5px;
+				padding-bottom: 5px;
+			}
+		</style>
+    </body>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript">
+
+        var serviceURL = document.URL;
+        var socket = io.connect('http://localhost:8080');
+
+        //Método que obtiene los valores de los sensores y los usa para mostrarlo
+        socket.on('valorSensores',function(valores){
+            getValorSensores(valores);
+			getRespuestasAgente(valores);
+        });
+
+        //Método para mostrar los valores de los sensores
+        function getValorSensores(valores){
+			var persiana = "cerrada";
+			if(valores.estadoPersiana == true){
+				persiana = "abiera";
+			}
+
+			var aireAcon = "apagado";
+			if(valores.estadoAireAcondicionado == true){
+				aireAcon = "encendido";
+			}
+
+			var agente = "apagado";
+			if(valores.estadoAgenteDomotico == true){
+				agente = "encendido";
+			}
+
+
+			var calefaccion = "apagado";
+			if(valores.estadoCalefaccion == true){
+				calefaccion = "encendido";
+			}
+
+			var humidificador = "apagado";
+			if(valores.estadoHumidificador == true){
+				humidificador = "encendido";
+			}
+
+			var ventana = "cerrada";
+			if(valores.estadoVentana == true){
+				ventana = "abierta";
+			}
+			
+			var p = '<p> Temperatura: '+valores.temperatura+'ºC <br/>Luminosidad: '+ valores.luminosidad+'% <br/>Persiana: '+persiana+
+				'<br/>Estado Aire Acondicionado: '+aireAcon+'<br/>Estado del agente domótico: '+agente+
+				'<br/>Humedad: '+valores.humedad+'% <br/> Estado Calefacción: '+calefaccion+
+				'<br/>Estado Humidificador: '+humidificador+
+				'<br/>Estado ventana: '+ventana+'<br/>Velocidad viento: '+valores.viento+' km/h </p>';
+            
+			document.getElementById('resultados').innerHTML = p;
+        }
+
+        //Método para mostrar las respuestas del agente
+        function getRespuestasAgente(valores){
+                console.log(valores.respuestasAgente[1]);
+                if(valores.respuestasAgente == ""){
+                    respuestas = "Agente preparado para realizar sus funciones";
+                }
+                else{
+                    respuestas = [];
+                    respuestas += '<p>'+ valores.respuestasAgente +'</p>';
+                }
+
+			document.getElementById('mensajes').innerHTML = respuestas;
+		}
+
+        // Método para que el usuario apague al agente 
+        function apagarAgente(){
+            socket.emit('estadoAgente');
+            return false;
+        }
+
+        // Método para que el usuario apague el aire 
+        function apagarAireAcondicionado(){
+            socket.emit('aireAcondicionado');
+            return false;
+        }
+
+        // Método para que el usuario baje la persiana 
+        function bajarPersiana(){
+            socket.emit('persiana');
+            return false;
+        }
+
+        // Método para que el usuario cierre la ventana
+        function cerrarVentana(){
+            socket.emit('ventana');
+            return false;
+        }
+
+        // Método para que el usuario apague al humidificador 
+        function apagarHumidificador(){
+            socket.emit('humidificador');
+            return false;
+        }
+
+        // Método para que el usuario apague la calefacción 
+        function apagarCalefaccion(){
+            socket.emit('calefaccion');
+            return false;
+        }
+
+    </script>
+</html>

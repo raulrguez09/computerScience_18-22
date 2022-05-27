@@ -1,0 +1,20 @@
+{
+  "name": "Meteo",
+  "version": "1.0.0",
+  "description": "P4 con Node.js y OpenWeatherMap",
+  "main": "servidor.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "meteo",
+    "openweathermap",
+    "node"
+  ],
+  "author": "Raul Rguez Prez",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.88.2",
+    "unirest": "^0.6.0"
+  }
+}
